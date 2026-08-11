@@ -1,0 +1,26 @@
+@import "./fonts.scss";
+@import "./variables.scss";
+@import "./reset.scss";
+
+html body {
+  height: 100%;
+}
+
+body {
+  font-family: $main-font;
+  background-color: $main-bg;
+  color: $main-text;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1216px;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
