@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <AppHeader />
-    <GalleryMain />
+    <AppHeader @search="handleSearch" />
+    <GalleryMain :searchQuery="searchQuery" />
     <AppFooter />
   </div>
 </template>
@@ -17,6 +17,16 @@ export default {
     AppHeader,
     GalleryMain,
     AppFooter,
+  },
+  data() {
+    return {
+      searchQuery: "",
+    };
+  },
+  methods: {
+    handleSearch(query) {
+      this.searchQuery = query;
+    },
   },
 };
 </script>

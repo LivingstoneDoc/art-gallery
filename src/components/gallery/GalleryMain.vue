@@ -2,12 +2,15 @@
   <main class="main">
     <div class="container">
       <h1>Картины эпохи Возрождения</h1>
-      <div class="cards-grid">
+      <div v-if="filteredPaintings.length > 0" class="cards-grid">
         <PaintingCard
-          v-for="painting in paintingsList"
+          v-for="painting in filteredPaintings"
           :key="painting.id"
           :painting="painting"
         />
+      </div>
+      <div v-else class="no-results">
+        <p>Ничего не найдено по запросу "{{ searchQuery }}"</p>
       </div>
     </div>
   </main>
@@ -22,10 +25,31 @@ export default {
   components: {
     PaintingCard,
   },
+  props: {
+    searchQuery: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       paintingsList: paintingsData,
     };
+  },
+  computed: {
+    filteredPaintings() {
+      if (!this.searchQuery || this.searchQuery.trim() === "") {
+        return this.paintingsList;
+      }
+      const query = this.searchQuery.toLowerCase().trim();
+
+      return this.paintingsList.filter((painting) => {
+        return (
+          painting.title.toLowerCase().includes(query) ||
+          painting.author.toLowerCase().includes(query)
+        );
+      });
+    },
   },
 };
 </script>
@@ -50,6 +74,13 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 32px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9f9f9f;
+  font-size: 18px;
 }
 
 @media (max-width: 1260px) {
