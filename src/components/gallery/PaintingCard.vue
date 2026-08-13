@@ -20,15 +20,22 @@
             {{ formatPrice(painting.price) }} ₽
           </span>
         </div>
-        <button class="buy-btn">Купить</button>
+        <BuyButton
+          :painting-id="painting.id"
+          @added-to-cart="handleAddedToCart"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import BuyButton from "../shared/BuyButton.vue";
 export default {
   name: "PaintingCard",
+  components: {
+    BuyButton,
+  },
   props: {
     painting: {
       type: Object,
@@ -38,6 +45,10 @@ export default {
   methods: {
     formatPrice(value) {
       return value.toLocaleString("ru-RU");
+    },
+    handleAddedToCart(paintingId) {
+      console.log(`Картина ${paintingId} добавлена в корзину`);
+      this.$emit("add-to-cart", paintingId);
     },
   },
 };
