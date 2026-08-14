@@ -1,5 +1,7 @@
 # Страница интернет-магазина (Art Gallery)
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://art-gallery-nine-ivory.vercel.app/)
+
 Проект представляет собой макет интернет-магазина с функционалом поиска, добавлением товара в корзину и просмотра подробной информации о товаре.
 
 ## Технологии
