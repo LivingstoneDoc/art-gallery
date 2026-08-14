@@ -76,6 +76,10 @@ export default {
     },
   },
 
+  mounted() {
+    this.loadCartState();
+  },
+
   methods: {
     handleClick() {
       if (this.status === "processing") return;
@@ -86,11 +90,38 @@ export default {
 
         setTimeout(() => {
           this.status = "in-cart";
+          this.saveToCart();
           this.$emit("added-to-cart", this.paintingId);
         }, 2000);
       } else if (this.status === "in-cart") {
         this.status = "idle";
+        this.removeFromCart();
         this.$emit("removed-from-cart", this.paintingId);
+      }
+    },
+    saveToCart() {
+      let cart = this.getCart();
+      if (!cart.includes(this.paintingId)) {
+        cart.push(this.paintingId);
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+    },
+
+    removeFromCart() {
+      let cart = this.getCart();
+      cart = cart.filter((id) => id !== this.paintingId);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    },
+
+    getCart() {
+      const cartData = localStorage.getItem("cart");
+      return cartData ? JSON.parse(cartData) : [];
+    },
+
+    loadCartState() {
+      const cart = this.getCart();
+      if (cart.includes(this.paintingId)) {
+        this.status = "in-cart";
       }
     },
   },
