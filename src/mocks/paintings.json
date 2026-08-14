@@ -8,7 +8,7 @@
     "image": "venus.webp",
     "sold": false,
     "description": "Одно из самых известных произведений живописи эпохи Возрождения. Картина иллюстрирует миф о рождении богини любви.",
-    "gallery": ["venus.png", "venus_detail_1.webp", "venus_detail_2.webp"]
+    "gallery": ["venus.webp", "venus_detail_1.webp", "venus_detail_2.webp"]
   },
   {
     "id": 2,
@@ -19,7 +19,7 @@
     "image": "supper.webp",
     "sold": false,
     "description": "Выдающийся шедевр монументальной живописи эпохи Возрождения. Фреска запечатлела драматичную сцену последней трапезы Христа со своими учениками.",
-    "gallery": ["supper.png", "supper_detail_1.webp", "supper_detail_2.webp"]
+    "gallery": ["supper.webp", "supper_detail_1.webp", "supper_detail_2.webp"]
   },
   {
     "id": 3,
@@ -30,7 +30,7 @@
     "image": "adam.webp",
     "sold": false,
     "description": "Знаменитая фреска Сикстинской капеллы, ставшая символом эпохи Возрождения. Произведение иллюстрирует библейский сюжет передачи искры жизни от Бога первому человеку.",
-    "gallery": ["adam.png", "adam_detail_1.webp", "adam_detail_2.webp"]
+    "gallery": ["adam.webp", "adam_detail_1.webp", "adam_detail_2.webp"]
   },
   {
     "id": 4,
@@ -41,6 +41,10 @@
     "image": "anatomy.webp",
     "sold": true,
     "description": "Одно из самых значимых произведений голландской живописи XVII века. Картина представляет собой групповой портрет хирургов во время проведения публичного вскрытия.",
-    "gallery": ["anatomy.png", "anatomy_detail_1.webp", "anatomy_detail_2.webp"]
+    "gallery": [
+      "anatomy.webp",
+      "anatomy_detail_1.webp",
+      "anatomy_detail_2.webp"
+    ]
   }
 ]
