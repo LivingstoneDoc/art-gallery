@@ -7,23 +7,37 @@
           v-for="painting in filteredPaintings"
           :key="painting.id"
           :painting="painting"
+          :is-in-cart="cartIds.includes(painting.id)"
+          @open-modal="handleOpenModal"
+          @add-to-cart="handleAddToCart"
+          @remove-from-cart="handleRemoveFromCart"
         />
       </div>
       <div v-else class="no-results">
         <p>Ничего не найдено по запросу "{{ searchQuery }}"</p>
       </div>
     </div>
+    <PaintingModal
+      v-if="isModalOpen"
+      :painting="selectedPainting"
+      :is-in-cart="cartIds.includes(selectedPainting.id)"
+      @close="handleCloseModal"
+      @add-to-cart="handleAddToCart"
+      @remove-from-cart="handleRemoveFromCart"
+    />
   </main>
 </template>
 
 <script>
 import paintingsData from "@/mocks/paintings.json";
 import PaintingCard from "@/components/gallery/PaintingCard.vue";
+import PaintingModal from "../modals/PaintingModal.vue";
 
 export default {
   name: "GalleryMain",
   components: {
     PaintingCard,
+    PaintingModal,
   },
   props: {
     searchQuery: {
@@ -34,7 +48,16 @@ export default {
   data() {
     return {
       paintingsList: paintingsData,
+      isModalOpen: false,
+      selectedPainting: null,
+      cartIds: [],
     };
+  },
+  created() {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      this.cartIds = JSON.parse(savedCart);
+    }
   },
   computed: {
     filteredPaintings() {
@@ -49,6 +72,26 @@ export default {
           painting.author.toLowerCase().includes(query)
         );
       });
+    },
+  },
+  methods: {
+    handleOpenModal(painting) {
+      this.selectedPainting = painting;
+      this.isModalOpen = true;
+    },
+    handleCloseModal() {
+      this.isModalOpen = false;
+      this.selectedPainting = null;
+    },
+    handleAddToCart(paintingId) {
+      if (!this.cartIds.includes(paintingId)) {
+        this.cartIds.push(paintingId);
+        localStorage.setItem("cart", JSON.stringify(this.cartIds));
+      }
+    },
+    handleRemoveFromCart(paintingId) {
+      this.cartIds = this.cartIds.filter((id) => id !== paintingId);
+      localStorage.setItem("cart", JSON.stringify(this.cartIds));
     },
   },
 };

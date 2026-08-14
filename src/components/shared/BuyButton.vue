@@ -5,9 +5,9 @@
     :disabled="isProcessing"
     @click="handleClick"
   >
-    <span v-if="status === 'idle'" class="buy-btn">Купить</span>
+    <span v-if="currentStatus === 'idle'" class="buy-btn">Купить</span>
 
-    <span v-else-if="status === 'processing'" class="btn-content">
+    <span v-else-if="currentStatus === 'processing'" class="btn-content">
       <svg class="btn-icon spinner" viewBox="0 0 24 24">
         <circle
           cx="12"
@@ -26,7 +26,7 @@
       </svg>
     </span>
 
-    <span v-else-if="status === 'in-cart'" class="btn-content">
+    <span v-else-if="currentStatus === 'in-cart'" class="btn-content">
       <svg
         class="btn-icon"
         viewBox="0 0 24 24"
@@ -48,80 +48,48 @@
 <script>
 export default {
   name: "BuyButton",
-
   props: {
     paintingId: {
       type: Number,
       required: true,
     },
+    isInCart: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
-      status: "idle",
+      isProcessing: false,
     };
   },
 
   computed: {
+    currentStatus() {
+      if (this.isProcessing) return "processing";
+      if (this.isInCart) return "in-cart";
+      return "idle";
+    },
     buttonClass() {
       return {
-        "buy-btn--idle": this.status === "idle",
-        "buy-btn--processing": this.status === "processing",
-        "buy-btn--in-cart": this.status === "in-cart",
+        "buy-btn--idle": this.currentStatus === "idle",
+        "buy-btn--processing": this.currentStatus === "processing",
+        "buy-btn--in-cart": this.currentStatus === "in-cart",
       };
     },
-
-    isProcessing() {
-      return this.status === "processing";
-    },
   },
-
-  mounted() {
-    this.loadCartState();
-  },
-
   methods: {
     handleClick() {
-      if (this.status === "processing") return;
-
-      if (this.status === "idle") {
-        this.status = "processing";
-        this.$emit("processing", this.paintingId);
-
+      if (this.currentStatus === "processing") return;
+      if (this.currentStatus === "idle") {
+        this.isProcessing = true;
         setTimeout(() => {
-          this.status = "in-cart";
-          this.saveToCart();
+          this.isProcessing = false;
           this.$emit("added-to-cart", this.paintingId);
         }, 2000);
-      } else if (this.status === "in-cart") {
-        this.status = "idle";
-        this.removeFromCart();
+      } else if (this.currentStatus === "in-cart") {
         this.$emit("removed-from-cart", this.paintingId);
-      }
-    },
-    saveToCart() {
-      let cart = this.getCart();
-      if (!cart.includes(this.paintingId)) {
-        cart.push(this.paintingId);
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-    },
-
-    removeFromCart() {
-      let cart = this.getCart();
-      cart = cart.filter((id) => id !== this.paintingId);
-      localStorage.setItem("cart", JSON.stringify(cart));
-    },
-
-    getCart() {
-      const cartData = localStorage.getItem("cart");
-      return cartData ? JSON.parse(cartData) : [];
-    },
-
-    loadCartState() {
-      const cart = this.getCart();
-      if (cart.includes(this.paintingId)) {
-        this.status = "in-cart";
       }
     },
   },

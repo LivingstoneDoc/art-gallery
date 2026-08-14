@@ -3,10 +3,11 @@
     <img
       :src="`/images/${painting.image}`"
       :alt="painting.title"
-      class="card-image"
+      class="card-image clickable"
+      @click="$emit('open-modal', painting)"
     />
     <div class="card-body">
-      <h2 class="card-title">
+      <h2 class="card-title clickable" @click="$emit('open-modal', painting)">
         <span>«{{ painting.title }}»</span>
         <span>{{ painting.author }}</span>
       </h2>
@@ -22,7 +23,9 @@
         </div>
         <BuyButton
           :painting-id="painting.id"
+          :is-in-cart="isInCart"
           @added-to-cart="handleAddedToCart"
+          @removed-from-cart="handleRemovedFromCart"
         />
       </div>
     </div>
@@ -31,6 +34,7 @@
 
 <script>
 import BuyButton from "../shared/BuyButton.vue";
+
 export default {
   name: "PaintingCard",
   components: {
@@ -41,6 +45,7 @@ export default {
       type: Object,
       required: true,
     },
+    isInCart: { type: Boolean, default: false },
   },
   methods: {
     formatPrice(value) {
@@ -50,12 +55,24 @@ export default {
       console.log(`Картина ${paintingId} добавлена в корзину`);
       this.$emit("add-to-cart", paintingId);
     },
+    handleRemovedFromCart(paintingId) {
+      this.$emit("remove-from-cart", paintingId);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 @import "@/assets/styles/variables.scss";
+
+.clickable {
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
 
 .card {
   width: 280px;
